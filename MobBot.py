@@ -57,10 +57,9 @@ class ZergBot(sc2.BotAI):
                 await self.do(larvae.random.train(OVERLORD))
 
         # morph drones
-        
         # print('already_pending: {0} larvae.amount: {1} larvae.ready.amount: {2} minerals: {3}'.format(self.already_pending(DRONE), larvae.amount, larvae.ready.amount, self.minerals))
         if self.worker_production_allowed and (self.workers.amount + self.already_pending(DRONE) < self.DRONE_LIMIT):
-            if self.already_pending(DRONE) < 1:
+            if self.already_pending(DRONE) < hatches.amount:
                 if self.supply_left >= self.OVERLORD_CHECK or self.already_pending(OVERLORD):
                     if self.can_afford(DRONE) and larvae.amount > 0:
                         # larva = larvae.take(2)
@@ -207,7 +206,7 @@ class ZergBot(sc2.BotAI):
 
         # main roach force
         if self.roach_production_allowed and self.units(ROACHWARREN).ready.exists and self.workers.amount > 45:
-            if self.already_pending(ROACH) < (larvae.amount + self.units(EGG).amount) * 0.75:
+            if self.already_pending(ROACH) < (larvae.amount + self.units(EGG).amount) * 0.5:
                 if self.supply_left >= self.OVERLORD_CHECK or self.already_pending(OVERLORD):
                     if self.can_afford(ROACH) and larvae.exists:
                         await self.do(larvae.random.train(ROACH))
@@ -301,7 +300,7 @@ class ZergBot(sc2.BotAI):
                         await self.do(queen(AbilityId.EFFECT_INJECTLARVA, hatch))
 
 def main():
-    run_game(maps.get("AbyssalReefLE"),[Bot(Race.Zerg, ZergBot()), Computer(Race.Random, Difficulty.Harder)], realtime=False)
+    run_game(maps.get("AbyssalReefLE"),[Bot(Race.Zerg, ZergBot()), Computer(Race.Random, Difficulty.Easy)], realtime=False)
 
 if __name__ == '__main__':
     main()
